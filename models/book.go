@@ -55,3 +55,30 @@ func GetAllBooks(db *sql.DB) ([]Book, error) {
 
 	return books, nil
 }
+
+func GetBooksByID(db *sql.DB, id int) (*Book, error) {
+	var book Book
+	var authors, categories []string
+	var publishedDate sql.NullTime
+
+	row := db.QueryRow("SELECT id, title, isbn, page_count, published_date, thumbnail_url, short_description, long_description, status, authors, categories FROM books WHERE id = $1", id)
+	err := row.Scan(&book.ID, &book.Title, &book.ISBN, &book.PageCount, &publishedDate, &book.ThumbnailURL, &book.ShortDescription, &book.LongDescription, &book.Status, pq.Array(&authors), pq.Array(&categories))
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	if publishedDate.Valid {
+		book.PublishedDate = &publishedDate.Time
+	} else {
+		book.PublishedDate = nil
+	}
+
+	book.Authors = authors
+	book.Categories = categories
+
+	return &book, nil
+}

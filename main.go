@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 
 	"github.com/omigarrett/byfood-takehome/backend/controllers"
@@ -26,7 +27,7 @@ import (
 func main() {
 	fmt.Println("The Best Book Application Ever")
 
-	mux := http.NewServeMux()
+	router := mux.NewRouter()
 
 	db, err := database.Connect()
 	if err != nil {
@@ -44,12 +45,13 @@ func main() {
 		log.Fatalf("Error seeding database: %v", err)
 	}
 
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Server is running")
 	})
 
-	mux.HandleFunc("/documentation/*", httpSwagger.WrapHandler)
-	mux.HandleFunc("/books", controllers.GetBooksController(db))
+	router.PathPrefix("/documentation/").Handler(httpSwagger.WrapHandler)
+	router.HandleFunc("/books", controllers.GetBooksController(db)).Methods("GET")
+	router.HandleFunc("/books/{id}", controllers.GetBookByIDController(db)).Methods("GET")
 
 	//MIDDLEWARE
 	corsOptions := cors.New(cors.Options{
@@ -59,7 +61,7 @@ func main() {
 		AllowCredentials: true,
 	})
 
-	handler := corsOptions.Handler(mux)
+	handler := corsOptions.Handler(router)
 	if err := http.ListenAndServe("localhost:8000", handler); err != nil {
 		fmt.Println(err.Error())
 	}

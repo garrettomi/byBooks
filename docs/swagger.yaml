@@ -52,4 +52,23 @@ paths:
       summary: Get all books
       tags:
       - books
+  /books/{id}:
+    get:
+      description: Get a book by its ID from the database
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Book'
+      summary: Get book by ID
+      tags:
+      - books
 swagger: "2.0"
