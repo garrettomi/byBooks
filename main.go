@@ -90,6 +90,13 @@ func getBooks(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
+			// Ensure that fields with valid dates aren't being input as null
+			if publishedDate.Valid {
+				book.PublishedDate = &publishedDate.Time
+			} else {
+				book.PublishedDate = nil
+			}
+
 			book.Authors = authors
 			book.Categories = categories
 			books = append(books, book)

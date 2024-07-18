@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/lib/pq"
 )
@@ -27,7 +28,7 @@ type Date struct {
 }
 
 func SeedDatabase(db *sql.DB) error {
-	//check for existing entries or duplicates
+	// Check for existing entries or duplicates
 	var count int
 	err := db.QueryRow("SELECT COUNT(*) FROM books").Scan(&count)
 	if err != nil {
@@ -50,20 +51,38 @@ func SeedDatabase(db *sql.DB) error {
 		return fmt.Errorf("Error parsing JSON data: %v", err)
 	}
 
-	for _, book := range books {
+	// Neccessary since there are multiple formats of dates
+	dateFormats := []string{
+		time.RFC3339Nano,
+		"2006-01-02T15:04:05.999-0700",
+		"2006-01-02T15:04:05-0700",
+	}
 
-		//Necessary since some books in the json didn't have published dates
-		var publishedDate interface{}
+	for _, book := range books {
+		var publishedDate time.Time
+		var publishedDatePtr *time.Time
+
+		// Necessary since some books in the JSON didn't have published dates
 		if book.PublishedDate != nil && book.PublishedDate.Date != "" {
-			publishedDate = book.PublishedDate.Date
+			var parseErr error
+			for _, format := range dateFormats {
+				publishedDate, parseErr = time.Parse(format, book.PublishedDate.Date)
+				if parseErr == nil {
+					publishedDatePtr = &publishedDate
+					break
+				}
+			}
+			if parseErr != nil {
+				return fmt.Errorf("Error parsing date %v: %v", book.PublishedDate.Date, parseErr)
+			}
 		} else {
-			publishedDate = nil
+			publishedDatePtr = nil
 		}
 
 		_, err := db.Exec(
 			`INSERT INTO books (title, isbn, page_count, published_date, thumbnail_url, short_description, long_description, status, authors, categories)
 			 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
-			book.Title, book.ISBN, book.PageCount, publishedDate, book.ThumbnailURL, book.ShortDescription, book.LongDescription, book.Status, pq.Array(book.Authors), pq.Array(book.Categories),
+			book.Title, book.ISBN, book.PageCount, publishedDatePtr, book.ThumbnailURL, book.ShortDescription, book.LongDescription, book.Status, pq.Array(book.Authors), pq.Array(book.Categories),
 		)
 		if err != nil {
 			return fmt.Errorf("Error inserting book %v: %v", book, err)
