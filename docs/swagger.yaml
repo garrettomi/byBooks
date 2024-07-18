@@ -1,4 +1,10 @@
+basePath: /
+host: localhost
 info:
-  contact: {}
+  contact:
+    name: Garrett Omi
+  description: This is the finest book application ever made
+  title: byFood Book Application
+  version: "1.0"
 paths: {}
 swagger: "2.0"

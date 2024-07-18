@@ -6,13 +6,18 @@ import (
 	"log"
 	"net/http"
 
+	httpSwagger "github.com/swaggo/http-swagger"
+
 	"github.com/omigarrett/byfood-takehome/backend/database"
 	seed "github.com/omigarrett/byfood-takehome/backend/script"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World")
-}
+// @title byFood Book Application
+// @version 1.0
+// @description This is the finest book application ever made
+// @contact.name Garrett Omi
+// @host localhost
+// @BasePath /
 
 // Initial migration if table does not exist for books
 func migrate(db *sql.DB) error {
@@ -35,6 +40,10 @@ func migrate(db *sql.DB) error {
 }
 
 func main() {
+	fmt.Println("The Best Book Application Ever")
+
+	mux := http.NewServeMux()
+
 	db, err := database.Connect()
 	if err != nil {
 		log.Fatal("Could not connect to the database: %v", err)
@@ -51,6 +60,13 @@ func main() {
 		log.Fatalf("Error seeding database: %v", err)
 	}
 
-	http.HandleFunc("/", handler)
-	http.ListenAndServe(":8000", nil)
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Server is running")
+	})
+
+	mux.HandleFunc("/documentation/", httpSwagger.WrapHandler)
+
+	if err := http.ListenAndServe("localhost:8000", mux); err != nil {
+		fmt.Println(err.Error())
+	}
 }

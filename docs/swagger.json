@@ -1,7 +1,14 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "This is the finest book application ever made",
+        "title": "byFood Book Application",
+        "contact": {
+            "name": "Garrett Omi"
+        },
+        "version": "1.0"
     },
+    "host": "localhost",
+    "basePath": "/",
     "paths": {}
 }
