@@ -52,6 +52,7 @@ func main() {
 	router.PathPrefix("/documentation/").Handler(httpSwagger.WrapHandler)
 	router.HandleFunc("/books", controllers.GetBooksController(db)).Methods("GET")
 	router.HandleFunc("/books/{id}", controllers.GetBookByIDController(db)).Methods("GET")
+	router.HandleFunc("/books", controllers.CreateBookController(db)).Methods("POST")
 
 	//MIDDLEWARE
 	corsOptions := cors.New(cors.Options{

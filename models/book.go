@@ -82,3 +82,17 @@ func GetBooksByID(db *sql.DB, id int) (*Book, error) {
 
 	return &book, nil
 }
+
+func CreateBook(db *sql.DB, book *Book) error {
+	err := db.QueryRow(
+		`INSERT INTO books (title, isbn, page_count, published_date, thumbnail_url, short_description, long_description, status, authors, categories)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        RETURNING id`,
+		book.Title, book.ISBN, book.PageCount, book.PublishedDate, book.ThumbnailURL, book.ShortDescription, book.LongDescription, book.Status, pq.Array(book.Authors), pq.Array(book.Categories),
+	).Scan(&book.ID)
+
+	if err != nil {
+		return err
+	}
+	return nil
+}

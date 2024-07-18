@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/omigarrett/byfood-takehome/backend/models"
@@ -63,5 +64,44 @@ func GetBookByIDController(db *sql.DB) http.HandlerFunc {
 		if err := json.NewEncoder(w).Encode(book); err != nil {
 			http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
 		}
+	}
+}
+
+// CreateBookController handles the request for creating a new book
+// @Summary Create a new book
+// @Description Create a new book in the database
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param book body models.Book true "Book"
+// @Success 201 {object} models.Book
+// @Router /books [post]
+func CreateBookController(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var book models.Book
+		err := json.NewDecoder(r.Body).Decode(&book)
+		if err != nil {
+			http.Error(w, "Invalid request payload", http.StatusBadRequest)
+			return
+		}
+
+		if book.PublishedDate != nil {
+			parsedDate, err := time.Parse(time.RFC3339, book.PublishedDate.Format(time.RFC3339))
+			if err != nil {
+				http.Error(w, "Invalid date format", http.StatusBadRequest)
+				return
+			}
+			book.PublishedDate = &parsedDate
+		}
+
+		err = models.CreateBook(db, &book)
+		if err != nil {
+			http.Error(w, "Error creating book", http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		json.NewEncoder(w).Encode(book)
 	}
 }
