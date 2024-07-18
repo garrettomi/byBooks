@@ -27,7 +27,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/main.Book"
+                                "$ref": "#/definitions/models.Book"
                             }
                         }
                     }
@@ -36,7 +36,7 @@
         }
     },
     "definitions": {
-        "main.Book": {
+        "models.Book": {
             "type": "object",
             "properties": {
                 "authors": {

@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  main.Book:
+  models.Book:
     properties:
       authors:
         items:
@@ -47,7 +47,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/main.Book'
+              $ref: '#/definitions/models.Book'
             type: array
       summary: Get all books
       tags:

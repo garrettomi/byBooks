@@ -33,7 +33,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/main.Book"
+                                "$ref": "#/definitions/models.Book"
                             }
                         }
                     }
@@ -42,7 +42,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "main.Book": {
+        "models.Book": {
             "type": "object",
             "properties": {
                 "authors": {
