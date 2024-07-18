@@ -117,3 +117,50 @@ func CreateBookController(db *sql.DB) http.HandlerFunc {
 		json.NewEncoder(w).Encode(book)
 	}
 }
+
+// UpdateBookController handles the request for updating a book by its ID
+// @Summary Update a book
+// @Description Update a book by its ID in the database
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param id path int true "Book ID"
+// @Param book body models.Book true "Book"
+// @Success 200 {object} models.Book
+// @Router /books/{id} [patch]
+func UpdateBookController(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		id, err := strconv.Atoi(vars["id"])
+		if err != nil {
+			http.Error(w, "Invalid book ID", http.StatusBadRequest)
+			return
+		}
+
+		var book models.Book
+		err = json.NewDecoder(r.Body).Decode(&book)
+		if err != nil {
+			http.Error(w, "Invalid request payload", http.StatusBadRequest)
+			return
+		}
+		book.ID = id
+
+		if book.PublishedDate != nil {
+			parsedDate, err := time.Parse(time.RFC3339, book.PublishedDate.Format(time.RFC3339))
+			if err != nil {
+				http.Error(w, "Invalid date format", http.StatusBadRequest)
+				return
+			}
+			book.PublishedDate = &parsedDate
+		}
+
+		err = models.UpdateBook(db, &book)
+		if err != nil {
+			http.Error(w, "Error updating book", http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(book)
+	}
+}

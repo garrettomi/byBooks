@@ -96,3 +96,11 @@ func CreateBook(db *sql.DB, book *Book) error {
 	}
 	return nil
 }
+
+func UpdateBook(db *sql.DB, book *Book) error {
+	_, err := db.Exec(
+		`UPDATE books SET title = $1, isbn = $2, page_count = $3, published_date = $4, thumbnail_url = $5, short_description = $6, long_description = $7, status = $8, authors = $9, categories = $10 WHERE id = $11`,
+		book.Title, book.ISBN, book.PageCount, book.PublishedDate, book.ThumbnailURL, book.ShortDescription, book.LongDescription, book.Status, pq.Array(book.Authors), pq.Array(book.Categories), book.ID,
+	)
+	return err
+}

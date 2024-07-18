@@ -92,4 +92,30 @@ paths:
       summary: Get book by ID
       tags:
       - books
+    patch:
+      consumes:
+      - application/json
+      description: Update a book by its ID in the database
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Book
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/models.Book'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Book'
+      summary: Update a book
+      tags:
+      - books
 swagger: "2.0"
