@@ -1,10 +1,55 @@
 basePath: /
-host: localhost
+definitions:
+  main.Book:
+    properties:
+      authors:
+        items:
+          type: string
+        type: array
+      categories:
+        items:
+          type: string
+        type: array
+      id:
+        type: integer
+      isbn:
+        type: string
+      longDescription:
+        type: string
+      pageCount:
+        type: integer
+      publishedDate:
+        type: string
+      shortDescription:
+        type: string
+      status:
+        type: string
+      thumbnailUrl:
+        type: string
+      title:
+        type: string
+    type: object
+host: localhost:8000
 info:
   contact:
     name: Garrett Omi
   description: This is the finest book application ever made
   title: byFood Book Application
   version: "1.0"
-paths: {}
+paths:
+  /books:
+    get:
+      description: Get all books from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.Book'
+            type: array
+      summary: Get all books
+      tags:
+      - books
 swagger: "2.0"

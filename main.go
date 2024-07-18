@@ -2,11 +2,19 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
+	"github.com/lib/pq"
+	_ "github.com/lib/pq"
+
+	_ "github.com/omigarrett/byfood-takehome/backend/docs"
 	httpSwagger "github.com/swaggo/http-swagger"
+
+	"github.com/rs/cors"
 
 	"github.com/omigarrett/byfood-takehome/backend/database"
 	seed "github.com/omigarrett/byfood-takehome/backend/script"
@@ -16,8 +24,22 @@ import (
 // @version 1.0
 // @description This is the finest book application ever made
 // @contact.name Garrett Omi
-// @host localhost
+// @host localhost:8000
 // @BasePath /
+
+type Book struct {
+	ID               int        `json:"id"`
+	Title            string     `json:"title"`
+	ISBN             string     `json:"isbn"`
+	PageCount        int        `json:"pageCount"`
+	PublishedDate    *time.Time `json:"publishedDate"`
+	ThumbnailURL     string     `json:"thumbnailUrl"`
+	ShortDescription string     `json:"shortDescription"`
+	LongDescription  string     `json:"longDescription"`
+	Status           string     `json:"status"`
+	Authors          []string   `json:"authors"`
+	Categories       []string   `json:"categories"`
+}
 
 // Initial migration if table does not exist for books
 func migrate(db *sql.DB) error {
@@ -37,6 +59,54 @@ func migrate(db *sql.DB) error {
 		);
 	`)
 	return err
+}
+
+// getBooks gets all books from the database
+// @Summary Get all books
+// @Description Get all books from the database
+// @Tags books
+// @Produce json
+// @Success 200 {array} Book
+// @Router /books [get]
+func getBooks(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		rows, err := db.Query("SELECT id, title, isbn, page_count, published_date, thumbnail_url, short_description, long_description, status, authors, categories FROM books")
+		if err != nil {
+			http.Error(w, "Error fetching books from database", http.StatusInternalServerError)
+			return
+		}
+		defer rows.Close()
+
+		var books []Book
+		for rows.Next() {
+			var book Book
+			var authors, categories []string
+
+			var publishedDate sql.NullTime
+
+			if err := rows.Scan(&book.ID, &book.Title, &book.ISBN, &book.PageCount, &publishedDate, &book.ThumbnailURL, &book.ShortDescription, &book.LongDescription, &book.Status, pq.Array(&authors), pq.Array(&categories)); err != nil {
+				log.Printf("Error scanning book data: %v", err)
+				http.Error(w, "Error scanning book data", http.StatusInternalServerError)
+				return
+			}
+
+			book.Authors = authors
+			book.Categories = categories
+			books = append(books, book)
+		}
+
+		if err := rows.Err(); err != nil {
+			log.Printf("Error with rows: %v", err)
+			http.Error(w, "Error with rows", http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		if err := json.NewEncoder(w).Encode(books); err != nil {
+			log.Printf("Error encoding JSON response: %v", err)
+			http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
+		}
+	}
 }
 
 func main() {
@@ -64,9 +134,19 @@ func main() {
 		fmt.Fprintf(w, "Server is running")
 	})
 
-	mux.HandleFunc("/documentation/", httpSwagger.WrapHandler)
+	mux.HandleFunc("/documentation/*", httpSwagger.WrapHandler)
+	mux.HandleFunc("/books", getBooks(db))
 
-	if err := http.ListenAndServe("localhost:8000", mux); err != nil {
+	//MIDDLEWARE
+	corsOptions := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+	})
+
+	handler := corsOptions.Handler(mux)
+	if err := http.ListenAndServe("localhost:8000", handler); err != nil {
 		fmt.Println(err.Error())
 	}
 }
