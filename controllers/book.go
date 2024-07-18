@@ -86,12 +86,24 @@ func CreateBookController(db *sql.DB) http.HandlerFunc {
 		}
 
 		if book.PublishedDate != nil {
-			parsedDate, err := time.Parse(time.RFC3339, book.PublishedDate.Format(time.RFC3339))
+			var parsedDate time.Time
+			dateFormats := []string{
+				time.RFC3339,
+				"2006-01-02",
+				"02 Jan 2006",
+				"January 2, 2006",
+			}
+			for _, format := range dateFormats {
+				parsedDate, err = time.Parse(format, book.PublishedDate.Format(format))
+				if err == nil {
+					book.PublishedDate = &parsedDate
+					break
+				}
+			}
 			if err != nil {
 				http.Error(w, "Invalid date format", http.StatusBadRequest)
 				return
 			}
-			book.PublishedDate = &parsedDate
 		}
 
 		err = models.CreateBook(db, &book)

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"bytes"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -71,6 +72,49 @@ func TestGetBooksByIDController(t *testing.T) {
 	err = json.NewDecoder(rr.Body).Decode(&book)
 	assert.NoError(t, err)
 	assert.Equal(t, "Harry Potter", book.Title)
+
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
+
+func TestCreateBookController(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
+
+	mock.ExpectQuery(`INSERT INTO books \(title, isbn, page_count, published_date, thumbnail_url, short_description, long_description, status, authors, categories\)
+        VALUES \(\$1, \$2, \$3, \$4, \$5, \$6, \$7, \$8, \$9, \$10\) RETURNING id`).
+		WithArgs("Jurassic Park", "1234567890123", 100, nil, "thumbnail.jpg", "Short Description", "Long Description", "Available", pq.Array([]string{"Michael Crichton"}), pq.Array([]string{"Science Fiction"})).
+		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
+
+	book := models.Book{
+		Title:            "Jurassic Park",
+		ISBN:             "1234567890123",
+		PageCount:        100,
+		PublishedDate:    nil,
+		ThumbnailURL:     "thumbnail.jpg",
+		ShortDescription: "Short Description",
+		LongDescription:  "Long Description",
+		Status:           "Available",
+		Authors:          []string{"Michael Crichton"},
+		Categories:       []string{"Science Fiction"},
+	}
+	body, _ := json.Marshal(book)
+	req, err := http.NewRequest(http.MethodPost, "/books", bytes.NewBuffer(body))
+	assert.NoError(t, err)
+	req.Header.Set("Content-Type", "application/json")
+
+	rr := httptest.NewRecorder()
+
+	handler := CreateBookController(db)
+
+	handler.ServeHTTP(rr, req)
+
+	assert.Equal(t, http.StatusCreated, rr.Code)
+
+	var createdBook models.Book
+	err = json.NewDecoder(rr.Body).Decode(&createdBook)
+	assert.NoError(t, err)
+	assert.Equal(t, "Jurassic Park", createdBook.Title)
 
 	assert.NoError(t, mock.ExpectationsWereMet())
 }
