@@ -12,7 +12,7 @@ import (
 func Connect() (*sql.DB, error) {
 	err := godotenv.Load()
 	if err != nil {
-		return nil, fmt.Errorf("Error loading .env file")
+		return nil, fmt.Errorf("Error loading .env file: %v", err)
 	}
 
 	host := os.Getenv("DB_HOST")
@@ -26,14 +26,12 @@ func Connect() (*sql.DB, error) {
 
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("Error opening database connection: %v", err)
 	}
-
-	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("Error pinging database: %v", err)
 	}
 
 	fmt.Println("Successfully connected")
