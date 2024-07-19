@@ -7,11 +7,10 @@ type Inputs = Omit<Book, 'id' | 'authors' | 'categories'> & {
     categories: string;
 };
 
-export default function Form () {
+export default function AddBooksForm () {
     const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        // Convert authors and categories from comma-separated strings to arrays
         const bookData = {
             ...data,
             pageCount: parseInt(data.pageCount as unknown as string, 10),
@@ -19,7 +18,6 @@ export default function Form () {
             categories: data.categories.split(',').map((category) => category.trim()),
         };
 
-        // Format the publishedDate to the required format
         if (bookData.publishedDate) {
             bookData.publishedDate = new Date(bookData.publishedDate).toISOString();
         }
@@ -34,7 +32,6 @@ export default function Form () {
             });
 
             if (!res.ok) {
-                // Log the response status and text for debugging
                 const errorText = await res.text();
                 console.error('Error details:', res.status, errorText);
                 throw new Error('Failed to add book');

@@ -1,4 +1,4 @@
-import Form from "./form";
+import AddBookForm from "./add-book-form";
 import Link from "next/link";
 import { Book } from "../globals";
 
@@ -6,7 +6,8 @@ async function getBooks() {
     const res = await fetch('http://localhost:8000/books', {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache'
         }
     });
 
@@ -23,7 +24,7 @@ export async function Dashboard () {
     return (
         <div>
             This is the dashboard
-            <Form />
+            <AddBookForm />
             {books.map((book: Book) => (
                 <div key={book.id}>
                     <Link href={`/book/${book.id}`}>

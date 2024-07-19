@@ -1,8 +1,11 @@
-async function getBookById( id: string) {
+import Link from "next/link";
+
+async function getBookById(id: string) {
     const res = await fetch(`http://localhost:8000/books/${id}`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache'
         }
     });
 
@@ -32,6 +35,9 @@ export default async function Page ({ params }: { params: { id: string }}) {
                     <h6>{bookInformation.publishedDate}</h6>
                     <p>{bookInformation.longDescription}</p>
                 </div>
+                <Link href={`/edit/${params.id}`}>
+                Edit
+                </Link>
         </div>
     );
 };
