@@ -34,6 +34,21 @@ async function updateBook(id: string, bookData: any) {
     return res.json();
 }
 
+async function deleteBook(id: string) {
+    const res = await fetch(`http://localhost:8000/books/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!res.ok) {
+        throw new Error('Failed to delete book');
+    }
+
+    return res.json();
+}
+
 export default function EditBookPage({ params }: { params: { id: string }}) {
     const [book, setBook] = useState<any>(null);
     const [formData, setFormData] = useState<any>({
@@ -86,6 +101,20 @@ export default function EditBookPage({ params }: { params: { id: string }}) {
             router.push(`/book/${params.id}`);
         } catch (error) {
             console.error(error);
+        }
+    };
+
+    const handleDelete = async () => {
+        const confirmed = window.confirm("Are you sure you want to delete this book?");
+
+        if (confirmed) {
+            try {
+                await deleteBook(params.id);
+                router.push('/');
+                router.refresh();
+            } catch (error) {
+                console.error(error);
+            }
         }
     };
 
@@ -152,6 +181,9 @@ export default function EditBookPage({ params }: { params: { id: string }}) {
                 </div>
                 <button type="submit">Update Book</button>
             </form>
+            <button onClick={handleDelete} style={{ marginTop: '10px', backgroundColor: 'red', color: 'white' }}>
+                Delete Book
+            </button>
         </div>
     );
 }

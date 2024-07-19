@@ -2,6 +2,7 @@ import Link from "next/link";
 
 async function getBookById(id: string) {
     const res = await fetch(`http://localhost:8000/books/${id}`, {
+        cache: 'no-store',
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
