@@ -162,3 +162,26 @@ func TestUpdateBookController(t *testing.T) {
 
 	assert.NoError(t, mock.ExpectationsWereMet())
 }
+
+func TestDeleteBookController(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
+
+	mock.ExpectExec(`DELETE FROM books WHERE id = \$1`).WithArgs(1).WillReturnResult(sqlmock.NewResult(1, 1))
+
+	req, err := http.NewRequest(http.MethodDelete, "/books/1", nil)
+	assert.NoError(t, err)
+
+	rr := httptest.NewRecorder()
+
+	handler := DeleteBookController(db)
+
+	router := mux.NewRouter()
+	router.HandleFunc("/books/{id}", handler)
+	router.ServeHTTP(rr, req)
+
+	assert.Equal(t, http.StatusNoContent, rr.Code)
+
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
