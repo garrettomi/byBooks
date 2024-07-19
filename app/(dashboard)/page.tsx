@@ -1,4 +1,4 @@
-import AddBookForm from "./form";
+import Form from "./form";
 import Link from "next/link";
 import { Book } from "../globals";
 
@@ -23,7 +23,7 @@ export async function Dashboard () {
     return (
         <div>
             This is the dashboard
-            <AddBookForm />
+            <Form />
             {books.map((book: Book) => (
                 <div key={book.id}>
                     <Link href={`/book/${book.id}`}>
