@@ -10,10 +10,10 @@ async function getBooks() {
 
     if (!res.ok) {
         throw new Error('Failed to fetch books')
-    }
+    };
 
     return res.json()
-}
+};
 
 export async function Dashboard () {
     const books = await getBooks();
@@ -37,5 +37,5 @@ export async function Dashboard () {
             ))
             }
         </div>
-    )
-}
+    );
+};
