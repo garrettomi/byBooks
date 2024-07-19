@@ -104,3 +104,8 @@ func UpdateBook(db *sql.DB, book *Book) error {
 	)
 	return err
 }
+
+func DeleteBook(db *sql.DB, id int) error {
+	_, err := db.Exec("DELETE FROM books WHERE id = $1", id)
+	return err
+}

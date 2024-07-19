@@ -74,6 +74,20 @@ paths:
       tags:
       - books
   /books/{id}:
+    delete:
+      description: Delete a book by its ID from the database
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+      summary: Delete a book
+      tags:
+      - books
     get:
       description: Get a book by its ID from the database
       parameters:

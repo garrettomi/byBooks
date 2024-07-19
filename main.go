@@ -54,6 +54,7 @@ func main() {
 	router.HandleFunc("/books/{id}", controllers.GetBookByIDController(db)).Methods("GET")
 	router.HandleFunc("/books", controllers.CreateBookController(db)).Methods("POST")
 	router.HandleFunc("/books/{id}", controllers.UpdateBookController(db)).Methods("PATCH")
+	router.HandleFunc("/books/{id}", controllers.DeleteBookController(db)).Methods("DELETE")
 
 	//MIDDLEWARE
 	corsOptions := cors.New(cors.Options{

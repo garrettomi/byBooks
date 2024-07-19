@@ -100,6 +100,27 @@ const docTemplate = `{
                     }
                 }
             },
+            "delete": {
+                "description": "Delete a book by its ID from the database",
+                "tags": [
+                    "books"
+                ],
+                "summary": "Delete a book",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Book ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            },
             "patch": {
                 "description": "Update a book by its ID in the database",
                 "consumes": [
