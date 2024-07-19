@@ -118,3 +118,47 @@ func TestCreateBookController(t *testing.T) {
 
 	assert.NoError(t, mock.ExpectationsWereMet())
 }
+
+func TestUpdateBookController(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
+
+	mock.ExpectExec(`UPDATE books SET title = \$1, isbn = \$2, page_count = \$3, published_date = \$4, thumbnail_url = \$5, short_description = \$6, long_description = \$7, status = \$8, authors = \$9, categories = \$10 WHERE id = \$11`).
+		WithArgs("different title", "1234567890123", 100, nil, "thumbnail.jpg", "Short Description", "Long Description", "Available", pq.Array([]string{"Michael Crichton"}), pq.Array([]string{"Science Fiction"}), 1).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+
+	book := models.Book{
+		Title:            "different title",
+		ISBN:             "1234567890123",
+		PageCount:        100,
+		PublishedDate:    nil,
+		ThumbnailURL:     "thumbnail.jpg",
+		ShortDescription: "Short Description",
+		LongDescription:  "Long Description",
+		Status:           "Available",
+		Authors:          []string{"Michael Crichton"},
+		Categories:       []string{"Science Fiction"},
+	}
+	body, _ := json.Marshal(book)
+	req, err := http.NewRequest(http.MethodPatch, "/books/1", bytes.NewBuffer(body))
+	assert.NoError(t, err)
+	req.Header.Set("Content-Type", "application/json")
+
+	rr := httptest.NewRecorder()
+
+	handler := UpdateBookController(db)
+
+	router := mux.NewRouter()
+	router.HandleFunc("/books/{id}", handler)
+	router.ServeHTTP(rr, req)
+
+	assert.Equal(t, http.StatusOK, rr.Code)
+
+	var updatedBook models.Book
+	err = json.NewDecoder(rr.Body).Decode(&updatedBook)
+	assert.NoError(t, err)
+	assert.Equal(t, "different title", updatedBook.Title)
+
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
