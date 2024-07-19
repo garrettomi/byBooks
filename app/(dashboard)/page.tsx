@@ -1,3 +1,4 @@
+import AddBookForm from "./form";
 import { Book } from "../globals";
 
 async function getBooks() {
@@ -21,6 +22,7 @@ export async function Dashboard () {
     return (
         <div>
             This is the dashboard
+            <AddBookForm />
             {books.map((book: Book) => (
                 <div key={book.id}>
                     <img src={book.thumbnailUrl} alt={book.title}></img>
