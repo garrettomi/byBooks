@@ -67,7 +67,6 @@ export default function EditBookPage({ params }: { params: { id: string }}) {
     };
 
     if (!formData.title) {
-        console.log("Cannot find book")
         return <div>Loading...</div>;
     }
 

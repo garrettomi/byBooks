@@ -23,27 +23,7 @@ export default function AddBooksForm () {
         if (bookData.publishedDate) {
             bookData.publishedDate = new Date(bookData.publishedDate).toISOString();
         }
-
-    //     try {
-    //         const res = await fetch('http://localhost:8000/books', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify(bookData),
-    //         });
-
-    //         if (!res.ok) {
-    //             const errorText = await res.text();
-    //             console.error('Error details:', res.status, errorText);
-    //             throw new Error('Failed to add book');
-    //         }
-
-    //         const book = await res.json();
-    //         console.log('Book successfully added:', book);
-    //     } catch (error) {
-    //         console.error('There was an error adding the book:', error);
-    //     }
+        
         await addBook(bookData);
     };
 
