@@ -2,55 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
-async function getBookById(id: string) {
-    const res = await fetch(`http://localhost:8000/books/${id}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-
-    if (!res.ok) {
-        throw new Error('Failed to fetch book');
-    }
-
-    return res.json();
-}
-
-async function updateBook(id: string, bookData: any) {
-    const res = await fetch(`http://localhost:8000/books/${id}`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(bookData)
-    });
-
-    if (!res.ok) {
-        throw new Error('Failed to update book');
-    }
-
-    return res.json();
-}
-
-async function deleteBook(id: string) {
-    const res = await fetch(`http://localhost:8000/books/${id}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-
-    if (!res.ok) {
-        throw new Error('Failed to delete book');
-    }
-
-    return res.json();
-}
+import { useBooks } from '@/context';
 
 export default function EditBookPage({ params }: { params: { id: string }}) {
-    const [book, setBook] = useState<any>(null);
+    const { books, updateBook, deleteBook } = useBooks();
     const [formData, setFormData] = useState<any>({
         title: '',
         isbn: '',
@@ -63,25 +18,19 @@ export default function EditBookPage({ params }: { params: { id: string }}) {
     const router = useRouter();
 
     useEffect(() => {
-        async function fetchBook() {
-            try {
-                const bookData = await getBookById(params.id);
-                setBook(bookData);
-                setFormData({
-                    title: bookData.title,
-                    isbn: bookData.isbn,
-                    authors: bookData.authors.join(', '),
-                    publishedDate: bookData.publishedDate,
-                    longDescription: bookData.longDescription,
-                    thumbnailUrl: bookData.thumbnailUrl
-                });
-            } catch (error) {
-                console.error(error);
-            }
+        const bookId = Number(params.id);
+        const book = books.find((book: any) => book.id === bookId);
+        if (book) {
+            setFormData({
+                title: book.title,
+                isbn: book.isbn,
+                authors: book.authors.join(', '),
+                publishedDate: book.publishedDate,
+                longDescription: book.longDescription,
+                thumbnailUrl:book.thumbnailUrl
+            })
         }
-
-        fetchBook();
-    }, [params.id]);
+    }, [books, params.id]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -111,14 +60,14 @@ export default function EditBookPage({ params }: { params: { id: string }}) {
             try {
                 await deleteBook(params.id);
                 router.push('/');
-                router.refresh();
             } catch (error) {
                 console.error(error);
             }
         }
     };
 
-    if (!book) {
+    if (!formData.title) {
+        console.log("Cannot find book")
         return <div>Loading...</div>;
     }
 

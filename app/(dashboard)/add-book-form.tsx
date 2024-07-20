@@ -1,5 +1,6 @@
 'use client'
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useBooks } from "@/context";
 import { Book } from "../globals";
 
 type Inputs = Omit<Book, 'id' | 'authors' | 'categories'> & {
@@ -9,6 +10,7 @@ type Inputs = Omit<Book, 'id' | 'authors' | 'categories'> & {
 
 export default function AddBooksForm () {
     const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
+    const { addBook } = useBooks();
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         const bookData = {
@@ -22,26 +24,27 @@ export default function AddBooksForm () {
             bookData.publishedDate = new Date(bookData.publishedDate).toISOString();
         }
 
-        try {
-            const res = await fetch('http://localhost:8000/books', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(bookData),
-            });
+    //     try {
+    //         const res = await fetch('http://localhost:8000/books', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify(bookData),
+    //         });
 
-            if (!res.ok) {
-                const errorText = await res.text();
-                console.error('Error details:', res.status, errorText);
-                throw new Error('Failed to add book');
-            }
+    //         if (!res.ok) {
+    //             const errorText = await res.text();
+    //             console.error('Error details:', res.status, errorText);
+    //             throw new Error('Failed to add book');
+    //         }
 
-            const book = await res.json();
-            console.log('Book successfully added:', book);
-        } catch (error) {
-            console.error('There was an error adding the book:', error);
-        }
+    //         const book = await res.json();
+    //         console.log('Book successfully added:', book);
+    //     } catch (error) {
+    //         console.error('There was an error adding the book:', error);
+    //     }
+        await addBook(bookData);
     };
 
     return (

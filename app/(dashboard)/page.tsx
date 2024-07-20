@@ -1,37 +1,28 @@
-import AddBookForm from "./add-book-form";
-import Link from "next/link";
-import { Book } from "../globals";
+'use client'
 
-async function getBooks() {
-    const res = await fetch('http://localhost:8000/books', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Cache-Control': 'no-cache'
-        }
-    });
+import { useBooks } from '@/context';
+import Link from 'next/link';
+import AddBooksForm from './add-book-form';
 
-    if (!res.ok) {
-        throw new Error('Failed to fetch books')
-    };
+export function Dashboard() {
+    const { books, loading, error } = useBooks();
 
-    return res.json()
-};
+    console.log(books)
 
-export async function Dashboard () {
-    const books = await getBooks();
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
 
     return (
         <div>
             This is the dashboard
-            <AddBookForm />
-            {books.map((book: Book) => (
+            <AddBooksForm />
+            {books.map((book) => (
                 <div key={book.id}>
                     <Link href={`/book/${book.id}`}>
-                        <img src={book.thumbnailUrl} alt={book.title}></img>
+                        <img src={book.thumbnailUrl} alt={book.title} />
                         <h3>{book.title}</h3>
                         <h4>
-                            {book.authors.map((name: string, index: number) => (
+                            {book.authors.map((name, index) => (
                                 <span key={index}>
                                     {name}{index < book.authors.length - 1 && ', '}
                                 </span>
@@ -40,8 +31,7 @@ export async function Dashboard () {
                         <h6>{book.publishedDate}</h6>
                     </Link>
                 </div>
-            ))
-            }
+            ))}
         </div>
     );
-};
+}

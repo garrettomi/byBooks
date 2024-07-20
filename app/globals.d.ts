@@ -11,3 +11,12 @@ export interface Book {
     authors: string[];
     categories: string[];
 }
+
+export interface BooksContextType {
+    books: Book[];
+    loading: boolean;
+    error: string | null;
+    addBook: (bookData: Omit<Book, 'id'>) => Promise<void>;
+    updateBook: (id: string, bookData: Partial<Book>) => Promise<void>;
+    deleteBook: (id: string) => Promise<void>;
+}
