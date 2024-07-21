@@ -2,7 +2,7 @@
 
 import { useBooks } from '@/context';
 import Link from 'next/link';
-import AddBooksForm from './add-book-form';
+import AddBooksForm from './add-book-form/add-book-form';
 
 export function Dashboard() {
     const { books, error } = useBooks();
