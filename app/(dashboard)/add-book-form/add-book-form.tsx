@@ -33,7 +33,7 @@ export default function AddBooksForm () {
 
     return (
         <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(onSubmit)}>
+            <form onSubmit={methods.handleSubmit(onSubmit)} className="bg-white rounded-2xl shadow-md p-4 flex flex-wrap gap-4 mb-6">
                 <FormField id="title" label="Title" required />
                 <FormField id="isbn" label="ISBN" required />
                 <FormField id="pageCount" label="Page Count" type="number" required />
