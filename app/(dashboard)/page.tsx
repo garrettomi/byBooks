@@ -5,11 +5,11 @@ import Link from 'next/link';
 import AddBooksForm from './add-book-form';
 
 export function Dashboard() {
-    const { books, loading, error } = useBooks();
+    const { books, error } = useBooks();
 
     console.log(books)
 
-    if (loading) return <div>Loading...</div>;
+    // if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
     return (

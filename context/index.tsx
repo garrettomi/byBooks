@@ -17,7 +17,7 @@ export function BooksProvider ({ children } : {
     children: React.ReactNode;
 }) {
     const [books, setBooks] = useState<Book[]>([]);
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -31,9 +31,10 @@ export function BooksProvider ({ children } : {
                 setBooks(data);
             } catch (error: any) {
                 setError(error)
-            } finally {
-                setLoading(false);
-            }
+            } 
+            // finally {
+            //     setLoading(false);
+            // }
         }
         fetchBooks();
     }, []);
@@ -94,7 +95,7 @@ export function BooksProvider ({ children } : {
 
     return (
         <BooksContext.Provider
-            value={{ books, loading, error, addBook, updateBook, deleteBook }}
+            value={{ books, error, addBook, updateBook, deleteBook }}
         >
             {children}
         </BooksContext.Provider>
