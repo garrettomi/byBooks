@@ -10,12 +10,13 @@ interface TextAreaFieldProps {
 const TextAreaField: React.FC<TextAreaFieldProps> = ({ id, label, value, onChange }) => {
     return (
         <div className="flex flex-col">
-            <label htmlFor={id}>{label}</label>
+            <label htmlFor={id} className="text-textPrimary mb-1">{label}</label>
             <textarea
                 id={id}
                 name={id}
                 value={value}
                 onChange={onChange}
+                className="border rounded px-2 py-1"
             />
         </div>
     );

@@ -6,12 +6,12 @@ const FormField = ({ label, name, value, onChange, isTextArea = false }: {
     isTextArea?: boolean
 }) => {
     return (
-        <div>
-            <label>{label}</label>
+        <div className="flex flex-col">
+            <label className="text-textPrimary mb-1">{label}</label>
             {isTextArea ? (
                 <textarea name={name} value={value} onChange={onChange}></textarea>
             ) : (
-                <input type="text" name={name} value={value} onChange={onChange} />
+                <input type="text" name={name} value={value} onChange={onChange} className="border rounded px-2 py-1" />
             )}
         </div>
     );

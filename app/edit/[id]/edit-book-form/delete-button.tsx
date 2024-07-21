@@ -21,7 +21,7 @@ const DeleteButton = ({ bookId }: { bookId: string }) => {
     };
 
     return (
-        <button onClick={handleDelete} style={{ marginTop: '10px', backgroundColor: 'red', color: 'white' }}>
+        <button onClick={handleDelete} className="bg-accent text-white px-4 py-2 rounded-full">
             Delete Book
         </button>
     );

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useBooks } from '@/context';
 import FormField from './form-field';
+import DeleteButton from './delete-button';
 
 
 const EditBookForm = ({ params }: { params: { id: string }}) => {
@@ -27,9 +28,13 @@ const EditBookForm = ({ params }: { params: { id: string }}) => {
                 title: book.title,
                 isbn: book.isbn,
                 authors: book.authors.join(', '),
+                pageCount: book.pageCount,
                 publishedDate: book.publishedDate,
+                shortDescription: book.shortDescription,
                 longDescription: book.longDescription,
-                thumbnailUrl: book.thumbnailUrl
+                thumbnailUrl: book.thumbnailUrl,
+                status: book.status,
+                categories: book.categories.join(', ')
             })
         }
     }, [books, params.id]);
@@ -60,14 +65,21 @@ const EditBookForm = ({ params }: { params: { id: string }}) => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-md p-4 flex flex-wrap gap-4 mb-6">
             <FormField label="Title" name="title" value={formData.title} onChange={handleChange} />
             <FormField label="ISBN" name="isbn" value={formData.isbn} onChange={handleChange} />
+            <FormField label="Page Count" name="pageCount" value={formData.pageCount} onChange={handleChange} />
             <FormField label="Authors" name="authors" value={formData.authors} onChange={handleChange} />
             <FormField label="Published Date" name="publishedDate" value={formData.publishedDate} onChange={handleChange} />
-            <FormField label="Long Description" name="longDescription" value={formData.longDescription} onChange={handleChange} isTextArea />
             <FormField label="Thumbnail URL" name="thumbnailUrl" value={formData.thumbnailUrl} onChange={handleChange} />
-            <button type="submit">Update Book</button>
+            <FormField label="Short Description" name="shortDescription" value={formData.shortDescription} onChange={handleChange} isTextArea/>
+            <FormField label="Long Description" name="longDescription" value={formData.longDescription} onChange={handleChange} isTextArea />
+            <FormField label="Status" name="status" value={formData.status} onChange={handleChange} />
+            <FormField label="Categories" name="categories" value={formData.categories} onChange={handleChange} />
+            <div>
+                <button type="submit" className="bg-primary text-white px-4 py-2 rounded-full">Update Book</button>
+                <DeleteButton bookId={params.id} />
+            </div>
         </form>
     );
 };
