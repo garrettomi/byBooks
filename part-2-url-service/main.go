@@ -6,7 +6,17 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	_ "github.com/omigarrett/byfood-takehome/backend/part-2-url-service/docs"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
+
+// @title URL Cleanup and Redirection
+// @version 1.0
+// @description This is a URL cleanup and redirector
+// @contact.name Garrett Omi
+// @host localhost:9000
+// @BasePath /
 
 type Request struct {
 	URL       string `json:"url"`
@@ -41,6 +51,16 @@ func redirectURL(rawURL string) (string, error) {
 	return strings.ToLower(parsedURL.String()), nil
 }
 
+// processURL godoc
+// @Summary Process URL
+// @Description Clean up and redirect URL based on operation type
+// @Accept  json
+// @Produce  json
+// @Param   request  body  Request  true  "URL and Operation"
+// @Success 200 {object} Response
+// @Failure 400 {string} string "Invalid request payload"
+// @Failure 500 {string} string "Error processing URL"
+// @Router /process-url [post]
 func processURL(w http.ResponseWriter, r *http.Request) {
 	var req Request
 	err := json.NewDecoder(r.Body).Decode(&req)
@@ -77,6 +97,7 @@ func processURL(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/process-url", processURL)
+	http.HandleFunc("/documentation/", httpSwagger.WrapHandler)
 	fmt.Println("Server started at :9000")
 	http.ListenAndServe(":9000", nil)
 }

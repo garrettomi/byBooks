@@ -1,0 +1,51 @@
+basePath: /
+definitions:
+  main.Request:
+    properties:
+      operation:
+        type: string
+      url:
+        type: string
+    type: object
+  main.Response:
+    properties:
+      processed_url:
+        type: string
+    type: object
+host: localhost:9000
+info:
+  contact:
+    name: Garrett Omi
+  description: This is a URL cleanup and redirector
+  title: URL Cleanup and Redirection
+  version: "1.0"
+paths:
+  /process-url:
+    post:
+      consumes:
+      - application/json
+      description: Clean up and redirect URL based on operation type
+      parameters:
+      - description: URL and Operation
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Response'
+        "400":
+          description: Invalid request payload
+          schema:
+            type: string
+        "500":
+          description: Error processing URL
+          schema:
+            type: string
+      summary: Process URL
+swagger: "2.0"
