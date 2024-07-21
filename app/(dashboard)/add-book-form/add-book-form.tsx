@@ -1,9 +1,9 @@
 'use client'
 import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
+import { useState, useEffect } from 'react';
 import { useBooks } from "@/context";
 import { Book } from "../../globals";
 import FormField from "./form-field";
-import TextAreaField from "./text-area-field";
 
 type Inputs = Omit<Book, 'id' | 'authors' | 'categories'> & {
     authors: string;
@@ -11,9 +11,9 @@ type Inputs = Omit<Book, 'id' | 'authors' | 'categories'> & {
 };
 
 export default function AddBooksForm () {
-    // const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
     const methods = useForm<Inputs>();
     const { addBook } = useBooks();
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         const bookData = {
@@ -28,6 +28,7 @@ export default function AddBooksForm () {
         }
         
         await addBook(bookData);
+        setSuccessMessage("Successfully added book!");
     };
 
     return (
@@ -45,69 +46,11 @@ export default function AddBooksForm () {
                 <FormField id="categories" label="Categories (separate by commas if multiple)" required />
                 <button type="submit">Add Book</button>
             </form>
+            {successMessage && (
+                <div>
+                    {successMessage}
+                </div>
+            )}
         </FormProvider>
-        // <form onSubmit={handleSubmit(onSubmit)}>
-        //     <div>
-        //         <label htmlFor="title">Title</label>
-        //         <input id="title" {...register('title', { required: true })} />
-        //         {errors.title && <span>This field is required</span>}
-        //     </div>
-
-        //     <div>
-        //         <label htmlFor="isbn">ISBN</label>
-        //         <input id="isbn" {...register('isbn', { required: true })} />
-        //         {errors.isbn && <span>This field is required</span>}
-        //     </div>
-
-        //     <div>
-        //         <label htmlFor="pageCount">Page Count</label>
-        //         <input type="number" id="pageCount" {...register('pageCount', { required: true })} />
-        //         {errors.pageCount && <span>This field is required</span>}
-        //     </div>
-
-        //     <div>
-        //         <label htmlFor="publishedDate">Published Date</label>
-        //         <input type="date" id="publishedDate" {...register('publishedDate', { required: true })} />
-        //         {errors.publishedDate && <span>This field is required</span>}
-        //     </div>
-
-        //     <div>
-        //         <label htmlFor="thumbnailUrl">Thumbnail URL</label>
-        //         <input id="thumbnailUrl" {...register('thumbnailUrl', { required: true })} />
-        //         {errors.thumbnailUrl && <span>This field is required</span>}
-        //     </div>
-
-        //     <div>
-        //         <label htmlFor="shortDescription">Short Description</label>
-        //         <textarea id="shortDescription" {...register('shortDescription', { required: true })} />
-        //         {errors.shortDescription && <span>This field is required</span>}
-        //     </div>
-
-        //     <div>
-        //         <label htmlFor="longDescription">Long Description</label>
-        //         <textarea id="longDescription" {...register('longDescription', { required: true })} />
-        //         {errors.longDescription && <span>This field is required</span>}
-        //     </div>
-
-        //     <div>
-        //         <label htmlFor="status">Status</label>
-        //         <input id="status" {...register('status', { required: true })} />
-        //         {errors.status && <span>This field is required</span>}
-        //     </div>
-
-        //     <div>
-        //         <label htmlFor="authors">Authors (comma separated)</label>
-        //         <input id="authors" {...register('authors', { required: true })} />
-        //         {errors.authors && <span>This field is required</span>}
-        //     </div>
-
-        //     <div>
-        //         <label htmlFor="categories">Categories (comma separated)</label>
-        //         <input id="categories" {...register('categories', { required: true })} />
-        //         {errors.categories && <span>This field is required</span>}
-        //     </div>
-
-        //     <button type="submit">Add Book</button>
-        // </form>
     );
 }
