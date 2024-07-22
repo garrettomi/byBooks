@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useBooks } from "@/context";
 import { Book } from "../../globals";
 import FormField from "./form-field";
+import SuccessPopup from "./success-pop-up";
 
 type Inputs = Omit<Book, 'id' | 'authors' | 'categories'> & {
     authors: string;
@@ -49,9 +50,10 @@ export default function AddBooksForm () {
                 </div>
             </form>
             {successMessage && (
-                <div>
-                    {successMessage}
-                </div>
+                <SuccessPopup 
+                    message={successMessage}
+                    onClose={() => setSuccessMessage(null)}
+                />
             )}
         </FormProvider>
     );
