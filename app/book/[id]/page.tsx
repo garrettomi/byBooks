@@ -23,9 +23,13 @@ export default async function Page ({ params }: { params: { id: string }}) {
 
     return (
         <div className="bg-background min-h-screen p-6">
-            <h1 className="text-primary text-3xl font-semibold mb-4">
-            {bookInformation.title}
-            </h1>
+            <nav className="text-primary text-3xl font-semibold mb-4">
+                <Link href="/" className="text-blue-600 hover:underline">
+                    All Books
+                </Link>
+                {' / '}
+                <span className="text-gray-500">{bookInformation.title}</span>
+            </nav>
                 <div className="bg-white rounded-lg shadow-md p-4">
                     <img className="w-56 h-auto rounded mb-4" src={bookInformation.thumbnailUrl} alt={bookInformation.title}></img>
                     <h3 className="text-textPrimary text-xl font-medium mb-2">{bookInformation.title}</h3>
