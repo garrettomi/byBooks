@@ -44,7 +44,9 @@ export default function AddBooksForm () {
                 <FormField id="status" label="Status" required />
                 <FormField id="authors" label="Authors (separate by commas if multiple)" required />
                 <FormField id="categories" label="Categories (separate by commas if multiple)" required />
-                <button type="submit">Add Book</button>
+                <div className="ml-5 mt-6">
+                    <button type="submit" className="bg-primary text-white px-4 py-2 rounded-full">Add Book</button>
+                </div>
             </form>
             {successMessage && (
                 <div>

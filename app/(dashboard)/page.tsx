@@ -7,9 +7,7 @@ import { formatDate } from '@/utils/formatDate';
 
 export function Dashboard() {
     const { books, error } = useBooks();
-
-    console.log(books)
-
+    
     if (error) return <div>Error: {error}</div>;
 
     return (
