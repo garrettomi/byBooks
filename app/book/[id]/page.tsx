@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatDate } from "@/utils/formatDate";
 
 async function getBookById(id: string) {
     const res = await fetch(`http://localhost:8000/books/${id}`, {
@@ -35,7 +36,7 @@ export default async function Page ({ params }: { params: { id: string }}) {
                             </span>
                         ))}
                     </h4>
-                    <h6 className="text-textSecondary text-sm mb-4">{bookInformation.publishedDate}</h6>
+                    <h6 className="text-textSecondary text-sm mb-4">{formatDate(bookInformation.publishedDate)}</h6>
                     <p className="text-textPrimary text-base mb-4">{bookInformation.longDescription}</p>
                 </div>
                 <Link className="text-secondary text-sm font-semibold" href={`/edit/${params.id}`}>

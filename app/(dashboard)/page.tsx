@@ -3,6 +3,7 @@
 import { useBooks } from '@/context';
 import Link from 'next/link';
 import AddBooksForm from './add-book-form/add-book-form';
+import { formatDate } from '@/utils/formatDate';
 
 export function Dashboard() {
     const { books, error } = useBooks();
@@ -30,7 +31,7 @@ export function Dashboard() {
                                         </span>
                                     ))}
                                 </h4>
-                                <h6 className="text-textSecondary text-xs">{book.publishedDate}</h6>
+                                <h6 className="text-textSecondary text-xs">{formatDate(book.publishedDate)}</h6>
                         </Link>
                     </div>
                 ))}

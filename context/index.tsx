@@ -23,14 +23,17 @@ export function BooksProvider ({ children } : {
     useEffect(() => {
         async function fetchBooks() {
             try {
+                console.log("Fetching books")
                 const res = await fetch(`http://localhost:8000/books`);
                 if (!res.ok) {
                     throw new Error('Failed to fetch books');
                 }
                 const data = await res.json();
                 setBooks(data);
+                console.log("Books fetched")
             } catch (error: any) {
                 setError(error)
+                console.error("Error fetching")
             } 
             // finally {
             //     setLoading(false);
