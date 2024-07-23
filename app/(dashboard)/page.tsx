@@ -2,14 +2,13 @@
 
 import { useBooks } from '@/context';
 import Link from 'next/link';
-import { Suspense } from 'react';
-import Loading from './loading';
 import AddBooksForm from './add-book-form/add-book-form';
 import { formatDate } from '@/utils/formatDate';
 
 export function Dashboard() {
-    const { books, error } = useBooks();
+    const { books, loading, error } = useBooks();
 
+    if (loading) return <div>Loading...</div>
     if (error) return <div>Error: {error}</div>;
 
     return (
@@ -18,7 +17,6 @@ export function Dashboard() {
             Books by Books
             </h1>
             <AddBooksForm />
-            <Suspense fallback={<Loading />}>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 {books.map((book) => (
                     <div key={book.id} className="bg-white rounded-lg shadow-md p-2">
@@ -37,7 +35,6 @@ export function Dashboard() {
                     </div>
                 ))}
             </div>
-            </Suspense>
         </div>
     );
 }

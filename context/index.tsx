@@ -95,7 +95,7 @@ export function BooksProvider ({ children } : {
 
     return (
         <BooksContext.Provider
-            value={{ books, error, addBook, updateBook, deleteBook }}
+            value={{ books, loading, error, addBook, updateBook, deleteBook }}
         >
             {children}
         </BooksContext.Provider>
