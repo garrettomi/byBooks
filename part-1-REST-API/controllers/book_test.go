@@ -15,65 +15,98 @@ import (
 )
 
 func TestGetBooksController(t *testing.T) {
-	db, mock, err := sqlmock.New()
-	assert.NoError(t, err)
-	defer db.Close()
+	t.Run("Returns books successfully", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+		defer db.Close()
 
-	rows := sqlmock.NewRows([]string{"id", "title", "isbn", "page_count", "published_date", "thumbnail_url", "short_description", "long_description", "status", "authors", "categories"}).
-		AddRow(1, "Harry Potter", "12341234", 100, nil, "http://photo.com/thumbnail.jpg", "This is a short description about a boy wizard", "This is a long description about a boy wizard", "Available", pq.Array([]string{"J.K. Rowling"}), pq.Array([]string{"Fantasy"}))
+		rows := sqlmock.NewRows([]string{"id", "title", "isbn", "page_count", "published_date", "thumbnail_url", "short_description", "long_description", "status", "authors", "categories"}).
+			AddRow(1, "Harry Potter", "12341234", 100, nil, "http://photo.com/thumbnail.jpg", "This is a short description about a boy wizard", "This is a long description about a boy wizard", "Available", pq.Array([]string{"J.K. Rowling"}), pq.Array([]string{"Fantasy"}))
 
-	mock.ExpectQuery("SELECT id, title, isbn, page_count, published_date, thumbnail_url, short_description, long_description, status, authors, categories FROM books").
-		WillReturnRows(rows)
+		mock.ExpectQuery("SELECT id, title, isbn, page_count, published_date, thumbnail_url, short_description, long_description, status, authors, categories FROM books").
+			WillReturnRows(rows)
 
-	req, err := http.NewRequest(http.MethodGet, "/books", nil)
-	assert.NoError(t, err)
+		req, err := http.NewRequest(http.MethodGet, "/books", nil)
+		assert.NoError(t, err)
 
-	rr := httptest.NewRecorder()
+		rr := httptest.NewRecorder()
 
-	handler := GetBooksController(db)
+		handler := GetBooksController(db)
 
-	handler.ServeHTTP(rr, req)
+		handler.ServeHTTP(rr, req)
 
-	assert.Equal(t, http.StatusOK, rr.Code)
+		assert.Equal(t, http.StatusOK, rr.Code)
 
-	var books []models.Book
-	err = json.NewDecoder(rr.Body).Decode(&books)
-	assert.NoError(t, err)
-	assert.Len(t, books, 1)
-	assert.Equal(t, "Harry Potter", books[0].Title)
+		var books []models.Book
+		err = json.NewDecoder(rr.Body).Decode(&books)
+		assert.NoError(t, err)
+		assert.Len(t, books, 1)
+		assert.Equal(t, "Harry Potter", books[0].Title)
 
-	assert.NoError(t, mock.ExpectationsWereMet())
+		assert.NoError(t, mock.ExpectationsWereMet())
+	})
+
+	t.Run("Return no books", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+		defer db.Close()
+
+		rows := sqlmock.NewRows([]string{"id", "title", "isbn", "page_count", "published_date", "thumbnail_url", "short_description", "long_description", "status", "authors", "categories"})
+
+		mock.ExpectQuery("SELECT id, title, isbn, page_count, published_date, thumbnail_url, short_description, long_description, status, authors, categories FROM books").
+			WillReturnRows(rows)
+
+		req, err := http.NewRequest(http.MethodGet, "/books", nil)
+		assert.NoError(t, err)
+
+		rr := httptest.NewRecorder()
+
+		handler := GetBooksController(db)
+
+		handler.ServeHTTP(rr, req)
+
+		assert.Equal(t, http.StatusOK, rr.Code)
+
+		var books []models.Book
+		err = json.NewDecoder(rr.Body).Decode(&books)
+		assert.NoError(t, err)
+		assert.Len(t, books, 0)
+
+		assert.NoError(t, mock.ExpectationsWereMet())
+	})
 }
 
 func TestGetBooksByIDController(t *testing.T) {
-	db, mock, err := sqlmock.New()
-	assert.NoError(t, err)
-	defer db.Close()
+	t.Run("Returns book by ID", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+		defer db.Close()
 
-	row := sqlmock.NewRows([]string{"id", "title", "isbn", "page_count", "published_date", "thumbnail_url", "short_description", "long_description", "status", "authors", "categories"}).
-		AddRow(1, "Harry Potter", "12341234", 100, nil, "http://photo.com/thumbnail.jpg", "This is a short description about a boy wizard", "This is a long description about a boy wizard", "Available", pq.Array([]string{"J.K. Rowling"}), pq.Array([]string{"Fantasy"}))
+		row := sqlmock.NewRows([]string{"id", "title", "isbn", "page_count", "published_date", "thumbnail_url", "short_description", "long_description", "status", "authors", "categories"}).
+			AddRow(1, "Harry Potter", "12341234", 100, nil, "http://photo.com/thumbnail.jpg", "This is a short description about a boy wizard", "This is a long description about a boy wizard", "Available", pq.Array([]string{"J.K. Rowling"}), pq.Array([]string{"Fantasy"}))
 
-	mock.ExpectQuery("SELECT id, title, isbn, page_count, published_date, thumbnail_url, short_description, long_description, status, authors, categories FROM books WHERE id = \\$1").
-		WithArgs(1).
-		WillReturnRows(row)
+		mock.ExpectQuery("SELECT id, title, isbn, page_count, published_date, thumbnail_url, short_description, long_description, status, authors, categories FROM books WHERE id = \\$1").
+			WithArgs(1).
+			WillReturnRows(row)
 
-	req, err := http.NewRequest(http.MethodGet, "/books/1", nil)
-	assert.NoError(t, err)
+		req, err := http.NewRequest(http.MethodGet, "/books/1", nil)
+		assert.NoError(t, err)
 
-	rr := httptest.NewRecorder()
+		rr := httptest.NewRecorder()
 
-	handler := GetBookByIDController(db)
+		handler := GetBookByIDController(db)
 
-	router := mux.NewRouter()
-	router.HandleFunc("/books/{id}", handler)
-	router.ServeHTTP(rr, req)
+		router := mux.NewRouter()
+		router.HandleFunc("/books/{id}", handler)
+		router.ServeHTTP(rr, req)
 
-	var book models.Book
-	err = json.NewDecoder(rr.Body).Decode(&book)
-	assert.NoError(t, err)
-	assert.Equal(t, "Harry Potter", book.Title)
+		var book models.Book
+		err = json.NewDecoder(rr.Body).Decode(&book)
+		assert.NoError(t, err)
+		assert.Equal(t, "Harry Potter", book.Title)
 
-	assert.NoError(t, mock.ExpectationsWereMet())
+		assert.NoError(t, mock.ExpectationsWereMet())
+	})
 }
 
 func TestCreateBookController(t *testing.T) {
