@@ -1,4 +1,7 @@
 import Link from "next/link";
+import Image from "next/image";
+
+import { validateImageSrc } from "@/utils/validateImage";
 import { formatDate } from "@/utils/formatDate";
 
 async function getBookById(id: string) {
@@ -31,7 +34,15 @@ export default async function Page ({ params }: { params: { id: string }}) {
                 <span className="text-gray-500">{bookInformation.title}</span>
             </nav>
                 <div className="bg-white rounded-lg shadow-md p-4">
-                    <img className="w-56 h-auto rounded mb-4" src={bookInformation.thumbnailUrl} alt={bookInformation.title}></img>
+                    <div className="relative w-56 h-72">
+                        <Image
+                            src={validateImageSrc(bookInformation.thumbnailUrl)}
+                            alt={bookInformation.title}
+                            fill
+                            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 560px"
+                            style={{ objectFit: 'cover' }}
+                        />
+                    </div>
                     <h3 className="text-textPrimary text-xl font-medium mb-2">{bookInformation.title}</h3>
                     <h4 className="text-textSecondary text-lg mb-2">
                         {bookInformation.authors.map((name: string, index: number) => (
