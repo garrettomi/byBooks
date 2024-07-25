@@ -1,9 +1,12 @@
 'use client'
 
-import { useBooks } from '@/context';
 import Link from 'next/link';
-import AddBooksForm from './add-book-form/add-book-form';
+import Image from 'next/image';
+
+import { useBooks } from '@/context';
 import { formatDate } from '@/utils/formatDate';
+import { validateImageSrc } from '@/utils/validateImage';
+import AddBooksForm from './add-book-form/add-book-form';
 
 export function Dashboard() {
     const { books, loading, error } = useBooks();
@@ -21,7 +24,15 @@ export function Dashboard() {
                 {books.map((book) => (
                     <div key={book.id} className="bg-white rounded-lg shadow-md p-2">
                         <Link href={`/book/${book.id}`} className="block">
-                                <img className="w-full h-auto rounded mb-2" src={book.thumbnailUrl} alt={book.title} />
+                                <div className="relative inset-0 z-0 h-auto min-h-[200px]">
+                                    <Image 
+                                        src={validateImageSrc(book.thumbnailUrl)}
+                                        alt={book.title}
+                                        fill
+                                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 560px"
+                                        style={{ objectFit: "cover" }}
+                                    />
+                                </div>
                                 <h3 className="text-textPrimary text-sm font-medium">{book.title}</h3>
                                 <h4 className="text-textSecondary text-xs">
                                     {book.authors.map((name, index) => (
