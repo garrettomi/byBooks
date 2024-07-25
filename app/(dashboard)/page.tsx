@@ -9,9 +9,9 @@ import { validateImageSrc } from '@/utils/validateImage';
 import AddBooksForm from './add-book-form/add-book-form';
 
 export function Dashboard() {
-    const { books, loading, error } = useBooks();
+    const { books, error } = useBooks();
 
-    if (loading) return <div>Loading...</div>
+    // if (loading) return <div>Loading...</div>
     if (error) return <div>Error: {error}</div>;
 
     return (

@@ -14,7 +14,7 @@ export interface Book {
 
 export interface BooksContextType {
     books: Book[];
-    loading: boolean;
+    // loading: boolean;
     error: string | null;
     addBook: (bookData: Omit<Book, 'id'>) => Promise<void>;
     updateBook: (id: string, bookData: Partial<Book>) => Promise<void>;
