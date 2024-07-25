@@ -5,7 +5,7 @@ import { validateImageSrc } from "@/utils/validateImage";
 import { formatDate } from "@/utils/formatDate";
 
 async function getBookById(id: string) {
-    const res = await fetch(`http://localhost:8000/books/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BOOK_BASE_URL}/books/${id}`, {
         cache: 'no-store',
         method: 'GET',
         headers: {

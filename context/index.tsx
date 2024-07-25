@@ -23,7 +23,7 @@ export function BooksProvider ({ children } : {
     useEffect(() => {
         async function fetchBooks() {
             try {
-                const res = await fetch(`http://localhost:8000/books`);
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BOOK_BASE_URL}/books`);
                 if (!res.ok) {
                     throw new Error('Failed to fetch books');
                 }
@@ -41,7 +41,7 @@ export function BooksProvider ({ children } : {
 
     const addBook = async (bookData: Omit<Book, 'id'>) => {
         try {
-            const res = await fetch('http://localhost:8000/books', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BOOK_BASE_URL}/books`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export function BooksProvider ({ children } : {
 
     const updateBook = async (id: string, bookData: Partial<Book>) => {
         try {
-            const res = await fetch(`http://localhost:8000/books/${id}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BOOK_BASE_URL}/books/${id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ export function BooksProvider ({ children } : {
 
     const deleteBook = async (id: string) => {
         try {
-            const res = await fetch(`http://localhost:8000/books/${id}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BOOK_BASE_URL}/books/${id}`, {
                 method: 'DELETE',
             });
             if (!res.ok) {
