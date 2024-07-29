@@ -1,6 +1,6 @@
 Thank you for your interest in one the greatest book applications to come, byBooks!
 
-Installation of byBooks is assisted by a Makefile you can find at the root level of this project containing various helper commands. Before moving on, here are the key example invocations you'll want to note: 
+Installation of byBooks is assisted by a ```Makefile``` you can find at the root level of this project containing various helper commands. Before moving on, here are the key example invocations you'll want to note: 
 
 ```
 make install
@@ -12,7 +12,7 @@ make test-rest-api
 make test-url-service
 ```
 
-Furthermore, examining the contents of the Makefile may help in understanding the above commands better.
+Furthermore, examining the contents of the ```Makefile``` may help in understanding the above commands better.
 
 Should you happen to run into any issues with the installation process or initial set-up, please do not hesistate to reach out. 
 
