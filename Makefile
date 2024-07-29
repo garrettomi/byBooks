@@ -14,6 +14,12 @@ start-url-service: generate-swagger-url-service
 stop-url-service:
 	- pkill -f "go run main.go" || true
 
+test-rest-api:
+	cd backend/part-1-REST-API/controllers && go test
+
+test-url-service:
+	cd backend/part-2-url-service && go test
+
 # BEFORE RUNNING PLEASE ENSURE POSTGRESQL DATABASE & .env FILES ARE SET UP AS REQUIRED
 install: install-backend-part-1-rest-api install-backend-part-2-url-service install-frontend
 

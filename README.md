@@ -73,6 +73,17 @@ For URL Service...
         - stop local port instance for URL Service
 
 
+Troubleshooting & Things to Note for Future Features
+
+- When starting up byBooks and accessing the frontend local port browser, occassionally there's a caching bug where the books will not display until after the browser has been refreshed.
+
+- When inputting, updating or deleting data, there may be an initial lag reflecting between the client side cache and the data being fetched. Features work, but may require at times a hard refresh after a few seconds depending on user's network.
+
+- The ability to input thumbnail urls is currently in a beta phase; while a value of string is required for the field, future iterations will include proper blob storage to handle images appropriately
+
+- All initial seeded data comes from books.json utilized by the generosity of dudeonthehorse/datasets. In order to access and reference the original dataset respository, please reference here: https://github.com/dudeonthehorse/datasets/blob/master/amazon.books.json
+
+
 Frontend Requirements...
 
 User Interface
@@ -89,9 +100,54 @@ State Management
 [x] Include client-side validation with visual feedback for required fields.
 [x] Use controlled components for form inputs to handle form data.
 
+Routing
+[x] Set up dynamic routing for viewing individual book details.
 
-Troubleshooting
+Error Handling
+[x] Present user-friendly error messages for network issues and form errors.
 
-- When starting up byBooks and accessing the frontend local port browser, occassionally there's a caching bug where the books will not display until after the browser has been refreshed
+Backend Requirements...
 
-- Blob storage or image hosting for thumbnails
+Part 1 - RESTful API
+Develop endpoints for managing books
+[x] GET /books – Retrieve all books.
+[x] POST /books – Add a new book.
+[x] GET /books/{id} – Get a single book by ID.
+[x] PUT /books/{id} – Update a book by ID.
+[x] DELETE /books/{id} – Delete a book by ID.
+
+Database Integration (Database of your choice)
+[x] Integrate any database of your choice for data persistence.
+[x] Implement queries within the Golang application to interact with the database.
+
+Validation
+[x] Enforce backend validations ensuring that all fields meet certain criteria before being
+processed (e.g., the title is not empty).
+
+Logging
+[x] Implement detailed logging, especially for API requests and error handling.
+
+Part 2 - URL Cleanup and Redirection Service
+[x] For a canonical URL operation, the service should process the request by
+cleaning up the URL. This involves removing query parameters and trailing
+slashes.
+
+[x] For redirection, in addition to ensuring the domain is www.byfood.com, convert
+the entire URL to lowercase.
+
+[x] For the third option it should conduct both of the above requirements and return
+the result.
+
+API Documentation
+[x] Document each endpoint using tools like Swagger to provide an interactive API
+reference.
+
+Deliverables
+[x] The codebase must be hosted in a version control system with a clear commit history.
+[x] A comprehensive README.md file detailing setup instructions, project structure,
+endpoint usage, and how to run tests.
+[x] Screenshots of the working application should be included in the documentation.
+[x] All installation and config scripts should ensure smooth local setup for development and
+testing purposes.
+[x] Ensure comprehensive unit tests for APIs, focusing on different edge cases, and
+providing test cases for the operations, by showing request and response bodies.
