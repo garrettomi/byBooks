@@ -78,13 +78,16 @@ Frontend Requirements...
 User Interface
 [x] Implement a dashboard that lists all books, with options to add, edit, view in detail, and
 delete books.
-
-
-● Create forms for adding new books and editing existing ones.
-● Each book entry should display basic information such as title, author, and year of
+[x] Create forms for adding new books and editing existing ones.
+[x] Each book entry should display basic information such as title, author, and year of
 publication.
-● Use modal dialogs for form submissions to enhance user experience.
+[x] Use modal dialogs for form submissions to enhance user experience.
 
+State Management
+[x] Utilize Context API to manage state across components.
+[x] Form Handling
+[x] Include client-side validation with visual feedback for required fields.
+[x] Use controlled components for form inputs to handle form data.
 
 
 Troubleshooting
