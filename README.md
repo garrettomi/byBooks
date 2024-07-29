@@ -78,7 +78,7 @@ For ```URL Service```...
     - What this should do...
         - stop local port instance for URL Service
 
-4. ```make test-url-service``` to run backend unit tests or go to ```http://localhost:8000/documentation/``` to test endpoints on ```swagger```
+4. ```make test-url-service``` to run backend unit tests or go to ```http://localhost:9000/documentation/``` to test endpoints on ```swagger```
 
 **Troubleshooting & Things to Note for Bugs/Future Features**
 
