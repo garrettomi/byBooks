@@ -20,7 +20,7 @@ Installation
 
 As byBooks runs on 2 separate directories splitting concerns between the frontend and backend, as well as a backend containing 2 functioning features (part 1 REST API & part 2 URL Services), we will go over set-up concerning all aspects of the project step-by-step:
 
-System
+**System**
 
 System Prerequisites:
 
@@ -29,69 +29,69 @@ System Prerequisites:
 - Swag version 1.16.3
 - Node.js version 18.17 or higher
 
-System steps: 
+**System steps:** 
 
 For byBooks...
 
 1. Setting up the database:
-    - psql postgres
-    - CREATE USER username WITH PASSWORD 'password';
-    - CREATE DATABASE byfood;
-    - GRANT ALL PRIVILEGES ON DATABASE byfood to username;
+    - ```psql postgres```
+    - ```CREATE USER username WITH PASSWORD 'password';```
+    - ```CREATE DATABASE byfood;```
+    - ```GRANT ALL PRIVILEGES ON DATABASE byfood to username;```
 
 2. Connecting to the database: 
-    - psql -d byfood -U username
-    - Create a .env file at the root level of /bybooks/backend/part-1-REST-API/
+    - ```psql -d byfood -U username```
+    - Create a ```.env``` file at the root level of ```/bybooks/backend/part-1-REST-API/```
     - Include and input values for the following DATABASE variables 
-        ( DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME )
+        ( ```DB_HOST```, ```DB_PORT```, ```DB_USER```, ```DB_PASSWORD```, ```DB_NAME``` )
 
-3. Frontend /bybooks/frontend
-    - Create a .env file at the root level of /bybooks/frontend/
-    - Include and input the value referencing the localhost port of part-1-REST-API in NEXT_PUBLIC_BOOK_BASE_URL (example: http://localhost:8000)
+3. Frontend ```/bybooks/frontend```
+    - Create a ```.env``` file at the root level of ```/bybooks/frontend/```
+    - Include and input the value referencing the localhost port of ```part-1-REST-API``` in ```NEXT_PUBLIC_BOOK_BASE_URL``` (example: ```http://localhost:8000```)
 
-4. make install
+4. ```make install```
 
-5. make start-book-app
+5. ```make start-book-app```
     - What this should do...
         - simultaneously starts up local ports for both frontend and backend
-        - if this is the first time running, this should run the inital seeding script in /bybooks/backend/part-1-REST-API/script/seed.go utilizing the data from the parallel file books.json
+        - if this is the first time running, this should run the inital seeding script in ```/bybooks/backend/part-1-REST-API/script/seed.go``` utilizing the data from the parallel file books.json
         - if this is not the first time running, seeding script should be skipped
-        - if swagger is not already initialized, it should initialize swagger for the backend
+        - if ```swagger``` is not already initialized, it should initialize ```swagger``` for the backend
 
-6. make stop-book-app
+6. ```make stop-book-app```
     - What this should do...
-        - simultaneously ends both local port instances for frontend and backend
+        - simultaneously ends both local port instances for ```frontend``` and ```backend```
 
-7. make test-rest-api to run backend unit tests or go to http://localhost:8000/documentation/ to test endpoints on swagger
+7. ```make test-rest-api``` to run backend unit tests or access ```http://localhost:8000/documentation/``` after starting the backend server to test endpoints on ```swagger```
 
 
 For URL Service...
 
-1. make install
+1. ```make install```
 
-2. make start-url-service
+2. ```make start-url-service```
     - What this should do...
         - start local port instance for URL Service
-        - if swagger is not already initialized, it should initialize swagger for the backend
+        - if ```swagger``` is not already initialized, it should initialize ```swagger``` for the backend
 
-3. make stop-url-service
+3. ```make stop-url-service```
     - What this should do...
         - stop local port instance for URL Service
 
-4. make test-url-service to run backend unit tests or go to http://localhost:8000/documentation/ to test endpoints on swagger
+4. ```make test-url-service``` to run backend unit tests or go to ```http://localhost:8000/documentation/``` to test endpoints on ```swagger```
 
-Troubleshooting & Things to Note for Bugs/Future Features
+**Troubleshooting & Things to Note for Bugs/Future Features**
 
-- When starting up byBooks and accessing the frontend local port browser, occassionally there's a caching bug where the books will not display until after the browser has been refreshed.
+- When starting up ```byBooks``` and accessing the frontend local port browser, occassionally there's a caching bug where the books will not display until after the browser has been refreshed.
 
 - When inputting, updating or deleting data, there may be an initial lag reflecting between the client side cache and the data being fetched. Features work, but may require at times a hard refresh after a few seconds depending on user's network.
 
 - The ability to input thumbnail urls is currently in a beta phase; while a value of string is required for the field, future iterations will include proper blob storage to handle images appropriately
 
-- All initial seeded data comes from books.json utilized by the generosity of dudeonthehorse/datasets. In order to access and reference the original dataset respository, please reference here: https://github.com/dudeonthehorse/datasets/blob/master/amazon.books.json
+- All initial seeded data comes from books.json utilized by the generosity of ```dudeonthehorse/datasets```. In order to access and reference the original dataset respository, please reference here: https://github.com/dudeonthehorse/datasets/blob/master/amazon.books.json
 
 
-Frontend Requirements...
+**Frontend Requirements...**
 
 User Interface
 [x] Implement a dashboard that lists all books, with options to add, edit, view in detail, and
@@ -113,7 +113,7 @@ Routing
 Error Handling
 [x] Present user-friendly error messages for network issues and form errors.
 
-Backend Requirements...
+**Backend Requirements...**
 
 Part 1 - RESTful API
 Develop endpoints for managing books
