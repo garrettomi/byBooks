@@ -1,14 +1,17 @@
 'use client'
 
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+
 import { useBooks } from '@/context';
 import FormField from './form-field';
 import DeleteButton from './delete-button';
+import useDebounce from '@/utils/useDebounce';
 
 
 const EditBookForm = ({ params }: { params: { id: string }}) => {
     const { books, updateBook } = useBooks();
+    console.log("Books", books);
     const [formData, setFormData] = useState<any>({
         title: '',
         isbn: '',
@@ -23,6 +26,7 @@ const EditBookForm = ({ params }: { params: { id: string }}) => {
     useEffect(() => {
         const bookId = Number(params.id);
         const book = books.find((book: any) => book.id === bookId);
+
         if (book) {
             setFormData({
                 title: book.title,
@@ -39,6 +43,8 @@ const EditBookForm = ({ params }: { params: { id: string }}) => {
         }
     }, [books, params.id]);
 
+    const debouncedFormData = useDebounce(formData, 500);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData({
@@ -50,10 +56,20 @@ const EditBookForm = ({ params }: { params: { id: string }}) => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            await updateBook(params.id, {
-                ...formData,
-                authors: formData.authors.split(',').map((author: string) => author.trim())
-            });
+            const dataToSubmit = {
+                ...debouncedFormData,
+                authors: debouncedFormData.authors.split(',').map((author: string) => author.trim()),
+                categories: debouncedFormData.categories.split(',').map((category: string) => category.trim()),
+            };
+            
+            // extra check to ensure date is transferred smoothly
+            if (dataToSubmit.publishedDate) {
+                dataToSubmit.publishedDate = new Date(dataToSubmit.publishedDate).toISOString();
+            }
+    
+            console.log("Data to Submit:", dataToSubmit);
+            await updateBook(params.id, dataToSubmit);
+            console.log("Form Data on Submit:", debouncedFormData);
             router.push(`/book/${params.id}`);
         } catch (error) {
             console.error(error);

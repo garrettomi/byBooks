@@ -71,6 +71,7 @@ export function BooksProvider ({ children } : {
             if (!res.ok) {
                 throw new Error('Failed to update book');
             }
+            
             const updatedBook = await res.json();
             setBooks((prevBooks) =>
                 prevBooks.map((book: any) => (book.id === id ? updatedBook : book))
