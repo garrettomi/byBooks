@@ -90,3 +90,5 @@ publication.
 Troubleshooting
 
 - When starting up byBooks and accessing the frontend local port browser, occassionally there's a caching bug where the books will not display until after the browser has been refreshed
+
+- Blob storage or image hosting for thumbnails

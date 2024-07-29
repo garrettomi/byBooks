@@ -11,7 +11,6 @@ import useDebounce from '@/utils/useDebounce';
 
 const EditBookForm = ({ params }: { params: { id: string }}) => {
     const { books, updateBook } = useBooks();
-    console.log("Books", books);
     const [formData, setFormData] = useState<any>({
         title: '',
         isbn: '',
@@ -67,9 +66,7 @@ const EditBookForm = ({ params }: { params: { id: string }}) => {
                 dataToSubmit.publishedDate = new Date(dataToSubmit.publishedDate).toISOString();
             }
     
-            console.log("Data to Submit:", dataToSubmit);
             await updateBook(params.id, dataToSubmit);
-            console.log("Form Data on Submit:", debouncedFormData);
             router.push(`/book/${params.id}`);
         } catch (error) {
             console.error(error);
