@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 import { useBooks } from '@/context';
@@ -20,7 +19,7 @@ const EditBookForm = ({ params }: { params: { id: string }}) => {
         longDescription: '',
         thumbnailUrl: ''
     });
-    const [successMessage, setSuccessMesage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     useEffect(() => {
         const bookId = Number(params.id);
@@ -67,7 +66,7 @@ const EditBookForm = ({ params }: { params: { id: string }}) => {
             }
     
             await updateBook(params.id, dataToSubmit);
-            setSuccessMesage("Successfully updated book!");
+            setSuccessMessage("Successfully updated book!");
         } catch (error) {
             console.error(error);
         }
@@ -92,13 +91,13 @@ const EditBookForm = ({ params }: { params: { id: string }}) => {
                 <FormField label="Categories" name="categories" value={formData.categories} onChange={handleChange} />
                 <div>
                     <button type="submit" className="bg-primary text-white px-4 py-2 rounded-full">Update Book</button>
-                    <DeleteButton bookId={params.id} />
+                    <DeleteButton bookId={params.id} setSuccessMessage={setSuccessMessage} />
                 </div>
             </form>
             {successMessage && (
                 <SuccessPopup
                     message={successMessage}
-                    onClose={() => setSuccessMesage(null)}
+                    onClose={() => setSuccessMessage(null)}
                 />
             )}
         </>

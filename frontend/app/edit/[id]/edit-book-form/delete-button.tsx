@@ -1,11 +1,9 @@
 'use client'
 
-import { useRouter } from 'next/navigation';
 import { useBooks } from '@/context';
 
-const DeleteButton = ({ bookId }: { bookId: string }) => {
+const DeleteButton = ({ bookId, setSuccessMessage }: { bookId: string, setSuccessMessage: (message: string) => void  }) => {
     const { deleteBook } = useBooks();
-    const router = useRouter();
 
     const handleDelete = async () => {
         const confirmed = window.confirm("Are you sure you want to delete this book?");
@@ -13,7 +11,7 @@ const DeleteButton = ({ bookId }: { bookId: string }) => {
         if (confirmed) {
             try {
                 await deleteBook(bookId);
-                router.push('/');
+                setSuccessMessage("Successfully deleted book!");
             } catch (error) {
                 console.error(error);
             }
