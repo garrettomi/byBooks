@@ -16,9 +16,9 @@ Furthermore, examining the contents of the ```Makefile``` may help in understand
 
 Should you happen to run into any issues with the installation process or initial set-up, please do not hesistate to reach out. 
 
-Installation
+**Installation**
 
-As byBooks runs on 2 separate directories splitting concerns between the frontend and backend, as well as a backend containing 2 functioning features (part 1 REST API & part 2 URL Services), we will go over set-up concerning all aspects of the project step-by-step:
+As byBooks runs on 2 separate directories splitting concerns between the ```frontend``` and ```backend```, as well as a ```backend``` containing 2 functioning features (```part 1 REST API``` & ```part 2 URL Services```), we will go over set-up concerning all aspects of the project step-by-step:
 
 **System**
 
@@ -31,7 +31,7 @@ System Prerequisites:
 
 **System steps:** 
 
-For byBooks...
+For ```byBooks```...
 
 1. Setting up the database:
     - ```psql postgres```
@@ -65,7 +65,7 @@ For byBooks...
 7. ```make test-rest-api``` to run backend unit tests or access ```http://localhost:8000/documentation/``` after starting the backend server to test endpoints on ```swagger```
 
 
-For URL Service...
+For ```URL Service```...
 
 1. ```make install```
 
@@ -94,67 +94,65 @@ For URL Service...
 **Frontend Requirements...**
 
 User Interface
-[x] Implement a dashboard that lists all books, with options to add, edit, view in detail, and
+- [x] Implement a dashboard that lists all books, with options to add, edit, view in detail, and
 delete books.
-[x] Create forms for adding new books and editing existing ones.
-[x] Each book entry should display basic information such as title, author, and year of
+- [x] Create forms for adding new books and editing existing ones.
+- [x] Each book entry should display basic information such as title, author, and year of
 publication.
-[x] Use modal dialogs for form submissions to enhance user experience.
+- [x] Use modal dialogs for form submissions to enhance user experience.
 
 State Management
-[x] Utilize Context API to manage state across components.
-[x] Form Handling
-[x] Include client-side validation with visual feedback for required fields.
-[x] Use controlled components for form inputs to handle form data.
+- [x] Utilize Context API to manage state across components.
+- [x] Form Handling
+- [x] Include client-side validation with visual feedback for required fields.
+- [x] Use controlled components for form inputs to handle form data.
 
 Routing
-[x] Set up dynamic routing for viewing individual book details.
+- [x] Set up dynamic routing for viewing individual book details.
 
 Error Handling
-[x] Present user-friendly error messages for network issues and form errors.
+- [x] Present user-friendly error messages for network issues and form errors.
 
 **Backend Requirements...**
 
 Part 1 - RESTful API
 Develop endpoints for managing books
-[x] GET /books – Retrieve all books.
-[x] POST /books – Add a new book.
-[x] GET /books/{id} – Get a single book by ID.
-[x] PUT /books/{id} – Update a book by ID.
-[x] DELETE /books/{id} – Delete a book by ID.
+- [x] GET /books – Retrieve all books.
+- [x] POST /books – Add a new book.
+- [x] GET /books/{id} – Get a single book by ID.
+- [x] PUT /books/{id} – Update a book by ID.
+- [x] DELETE /books/{id} – Delete a book by ID.
 
 Database Integration (Database of your choice)
-[x] Integrate any database of your choice for data persistence.
-[x] Implement queries within the Golang application to interact with the database.
+- [x] Integrate any database of your choice for data persistence.
+- [x] Implement queries within the Golang application to interact with the database.
 
 Validation
-[x] Enforce backend validations ensuring that all fields meet certain criteria before being
+- [x] Enforce backend validations ensuring that all fields meet certain criteria before being
 processed (e.g., the title is not empty).
 
 Logging
-[x] Implement detailed logging, especially for API requests and error handling.
+- [x] Implement detailed logging, especially for API requests and error handling.
 
 Part 2 - URL Cleanup and Redirection Service
-[x] For a canonical URL operation, the service should process the request by
+- [x] For a canonical URL operation, the service should process the request by
 cleaning up the URL. This involves removing query parameters and trailing
 slashes.
-
-[x] For redirection, in addition to ensuring the domain is www.byfood.com, convert
+- [x] For redirection, in addition to ensuring the domain is www.byfood.com, convert
 the entire URL to lowercase.
-
-[x] For the third option it should conduct both of the above requirements and return
+- [x] For the third option it should conduct both of the above requirements and return
 the result.
 
 API Documentation
-[x] Document each endpoint using tools like Swagger to provide an interactive API
+- [x] Document each endpoint using tools like Swagger to provide an interactive API
 reference.
 
 Deliverables
-[x] The codebase must be hosted in a version control system with a clear commit history.
-[x] A comprehensive README.md file detailing setup instructions, project structure,
+- [x] The codebase must be hosted in a version control system with a clear commit history.
+- [x] A comprehensive README.md file detailing setup instructions, project structure,
 endpoint usage, and how to run tests.
-[x] Screenshots of the working application should be included in the documentation.
-[x] All installation and config scripts should ensure smooth local setup for development and
+- [x] Screenshots of the working application should be included in the documentation.
+- [x] All installation and config scripts should ensure smooth local setup for development and
 testing purposes.
-[x] Ensure comprehensive unit tests for APIs, focusing on different edge cases, and
+- [x] Ensure comprehensive unit tests for APIs, focusing on different edge cases, and
 providing test cases for the operations, by showing request and response bodies.
