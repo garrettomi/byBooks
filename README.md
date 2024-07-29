@@ -1,12 +1,16 @@
 Thank you for your interest in one the greatest book applications to come, byBooks!
 
-Installation of byBooks is assisted by a Makefile you can find at the root level of the project containing various helper commands. Before moving on, here are the key example invocations you'll want to note: 
+Installation of byBooks is assisted by a Makefile you can find at the root level of this project containing various helper commands. Before moving on, here are the key example invocations you'll want to note: 
 
+```
 make install
 make start-book-app
 make stop-book-app
 make start-url-service
 make stop-url-service
+make test-rest-api
+make test-url-service
+```
 
 Furthermore, examining the contents of the Makefile may help in understanding the above commands better.
 
@@ -58,6 +62,8 @@ For byBooks...
     - What this should do...
         - simultaneously ends both local port instances for frontend and backend
 
+7. make test-rest-api to run backend unit tests or go to http://localhost:8000/documentation/ to test endpoints on swagger
+
 
 For URL Service...
 
@@ -72,8 +78,9 @@ For URL Service...
     - What this should do...
         - stop local port instance for URL Service
 
+4. make test-url-service to run backend unit tests or go to http://localhost:8000/documentation/ to test endpoints on swagger
 
-Troubleshooting & Things to Note for Future Features
+Troubleshooting & Things to Note for Bugs/Future Features
 
 - When starting up byBooks and accessing the frontend local port browser, occassionally there's a caching bug where the books will not display until after the browser has been refreshed.
 
